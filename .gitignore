@@ -1,2 +1,6 @@
+# Directories
 .vscode
 build
+
+# Files
+redis_password.txt

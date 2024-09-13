@@ -1,11 +1,23 @@
 ## Step 1: Install hiredis
-Download and Install hiredis: You can download hiredis from its GitHub repository or use a package manager if available.
+You can download hiredis from its GitHub repository or use a package manager if available.
 
 To download and compile hiredis manually:
 
 ```sh
 git clone https://github.com/redis/hiredis.git
 cd hiredis
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+
+## Step 2. Install Redis++
+To download and compile hiredis manually:
+```sh
+git clone https://github.com/sewenew/redis-plus-plus.git
+cd redis-plus-plus
 mkdir build
 cd build
 cmake ..

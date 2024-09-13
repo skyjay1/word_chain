@@ -6,7 +6,8 @@ using std::endl;
 #include <string>
 using std::string;
 
-#include "redis/redisclient.h"
+#include "redis/connection.h"
+using chain_game::Connection;
 
 int main()
 {
@@ -16,7 +17,8 @@ int main()
 
     cout << player1.get_name() << " has score " << player1.get_score() << endl;
 
-    ping();
+    Connection connection;
+    connection.ping();
 
     return 0;
 }
