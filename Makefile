@@ -20,7 +20,7 @@ REDISPP_LIB_PATH = /usr/local/lib
 # The compiler to use
 CC = g++
 # The flags to pass when compiling using the above compiler
-CFLAGS = -Wall -Wextra -std=c++20 -g -pthread \
+CFLAGS := -Wall -Wextra -std=c++20 -g -pthread \
 	-DREDIS_PASSWORD=$(REDIS_PASSWORD) \
 	-I$(INCLUDE_PATH) \
 	-I$(HIREDIS_INCLUDE_PATH) \
@@ -33,12 +33,6 @@ SOURCES := $(shell find $(SOURCE_PATH) -type f -name '*.cpp')
 OBJECTS := $(SOURCES:$(SOURCE_PATH)/%.cpp=$(BUILD_PATH)/%.o)
 # The name of the executable file that will be generated
 TARGET = bin
-
-.PHONY: debug
-debug:
-	@echo "shell:" $(shell cat $(REDIS_PASSWORD_FILE))
-	@echo "password:" $(REDIS_PASSWORD)
-	@echo "flags:" $(CFLAGS)
 
 # Compile and run the executable
 .PHONY: run
