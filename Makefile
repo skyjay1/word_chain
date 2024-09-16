@@ -2,12 +2,12 @@
 SOURCE_PATH = ./src
 # .h files are in this directory
 INCLUDE_PATH = ./include
-# The .h file that contains values that are configured at compile-time
-INCLUDE_CONFIG_H = ./include/config.h
 # .o files and executable file will be in this directory
 BUILD_PATH = ./build
 # The local file that contains the password for Redis
 REDIS_PASSWORD_FILE = redis_password.txt
+# Read the password from the file and surround with leading and trailing literal backslash and quotation mark
+REDIS_PASSWORD := $(addprefix \", $(addsuffix \", $(shell cat $(REDIS_PASSWORD_FILE))))
 
 # Path to the hiredis library and include directory
 HIREDIS_INCLUDE_PATH = /usr/local/include/hiredis
@@ -20,7 +20,11 @@ REDISPP_LIB_PATH = /usr/local/lib
 # The compiler to use
 CC = g++
 # The flags to pass when compiling using the above compiler
-CFLAGS := -Wall -Wextra -std=c++20 -g -pthread -I$(INCLUDE_PATH) -I$(HIREDIS_INCLUDE_PATH) -I$(REDISPP_INCLUDE_PATH)
+CFLAGS = -Wall -Wextra -std=c++20 -g -pthread \
+	-DREDIS_PASSWORD=$(REDIS_PASSWORD) \
+	-I$(INCLUDE_PATH) \
+	-I$(HIREDIS_INCLUDE_PATH) \
+	-I$(REDISPP_INCLUDE_PATH)
 LDFLAGS := -L$(HIREDIS_LIB_PATH) -L$(REDISPP_LIB_PATH) -lhiredis -lredis++
 
 # Use the shell to find all .cpp files, including subdirectories
@@ -29,6 +33,12 @@ SOURCES := $(shell find $(SOURCE_PATH) -type f -name '*.cpp')
 OBJECTS := $(SOURCES:$(SOURCE_PATH)/%.cpp=$(BUILD_PATH)/%.o)
 # The name of the executable file that will be generated
 TARGET = bin
+
+.PHONY: debug
+debug:
+	@echo "shell:" $(shell cat $(REDIS_PASSWORD_FILE))
+	@echo "password:" $(REDIS_PASSWORD)
+	@echo "flags:" $(CFLAGS)
 
 # Compile and run the executable
 .PHONY: run
@@ -52,12 +62,6 @@ $(BUILD_PATH)/$(TARGET): $(OBJECTS)
 $(BUILD_PATH)/%.o: $(SOURCE_PATH)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
-
-# Recipe to generate the config file with the password
-$(INCLUDE_CONFIG_H): $(REDIS_PASSWORD_FILE)
-	@echo '#pragma once' > $@
-	@echo '#define PASSWORD "$(shell cat $(REDIS_PASSWORD_FILE))"' >> $@
-	@echo "Password injected into config.h"
 
 # Recipe to delete executable and all .o files
 .PHONY: clean

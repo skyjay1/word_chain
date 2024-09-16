@@ -1,2 +1,5 @@
 #pragma once
-#define REDIS_PASSWORD "PLACEHOLDER"
+
+#ifndef REDIS_PASSWORD
+#define REDIS_PASSWORD "_PLACEHOLDER_"
+#endif
