@@ -23,30 +23,24 @@ Connection::Connection()
         connection_options.host = "redis-12678.c251.east-us-mz.azure.redns.redis-cloud.com";
         connection_options.port = 12678;
         connection_options.password = REDIS_PASSWORD;
-        connection_options.socket_timeout = std::chrono::milliseconds(400);
-        cout << "Password: " << REDIS_PASSWORD << endl;
-        // Connect to Redis instance (replace with your actual Redis connection details)
-        this->redis = make_unique<Redis>(connection_options);
+        //connection_options.socket_timeout = std::chrono::milliseconds(400);
+        // Connect to Redis instance
+        //this->redis = make_unique<Redis>(connection_options);
+        this->redis = make_unique<Redis>("tcp://127.0.0.1:6379");
     } catch (const sw::redis::Error &e) {
         cerr << "Redis error: " << e.what() << endl;
     }
 }
 
-Connection::~Connection()
-{
-    // TODO figure out if we need to close Redis
-}
+// TODO figure out if we need to close Redis
+Connection::~Connection() = default;    
 
 string Connection::ping()
 {
     try {
-        auto value = this->redis->command("PING");
-
-        if (value) {
-            std::cout << "PING: " << value << std::endl;
-        }
-    } catch (const sw::redis::Error &e) {
-        std::cerr << "Redis error: " << e.what() << std::endl;
+        return redis->ping();
+    } catch(const sw::redis::Error &e) {
+        cerr << "Redis error: " << e.what() << endl;
     }
-    return "";
+    return "ERR";
 }

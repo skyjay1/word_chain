@@ -18,6 +18,7 @@ int main()
     cout << player1.get_name() << " has score " << player1.get_score() << endl;
 
     Connection connection;
+    cout << "Constructed Connection instance" << endl;
     connection.ping();
 
     return 0;

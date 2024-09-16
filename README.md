@@ -20,7 +20,7 @@ git clone https://github.com/sewenew/redis-plus-plus.git
 cd redis-plus-plus
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 sudo make install
 ```
