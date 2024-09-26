@@ -82,9 +82,11 @@ redis-cli ping
 ```
 - Verify local redis server running:
 ```sh
-sudo systemctl status redis-server
+sudo service redis-server status
 sudo lsof -i :6379
 ```
+- **Note**: replace `status` with `start`, `stop`, or `restart` as needed
+
 - Checked the logs:
 ```sh
 sudo tail -f /var/log/redis/redis-server.log
@@ -93,3 +95,4 @@ which say "Ready to accept connections tcp"
 
 - Checked the Redis++ [Issues](https://github.com/sewenew/redis-plus-plus/issues) page
   - Issue [216](https://github.com/sewenew/redis-plus-plus/issues/216) which links to Issue [183](https://github.com/sewenew/redis-plus-plus/issues/183) says something about TLS certificates, I can't tell if that applies here, especially since the "failed to connect" error happens for both local and remote servers
+  - Issue [69](https://github.com/sewenew/redis-plus-plus/issues/69) mentions a 2020 update that allowed Redis++ to connect with username and password, which is what I'm trying to do. It mentions something about Redis ACL.
